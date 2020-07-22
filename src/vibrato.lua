@@ -3,36 +3,15 @@
 --------------------------------------------------------------------------------
 
 require('lfo')
-
-local lfo = LFO.new()
+require('lfo-util')
 
 Delay = Knob("Delay", 0, 0, 1000) -- 0 msec
-Delay.changed = function (self)
-    self.displayText = string.format("%4.0f msec", self.value)
-    lfo.delay = self.value
-end
-Delay:changed()
-
 Freq = Knob("Freq", 4.0, 0, 10) -- 4 Hz
-Freq.changed = function (self)
-    self.displayText = string.format("%0.1f hz", self.value)
-    lfo.freq = self.value
-end
-Freq:changed()
-
 Depth = Knob("Depth", 0.1, 0, 2)
-Depth.changed = function (self)
-    self.displayText = string.format("%0.1f %%", self.value * 100.0)
-    lfo.depth = self.value
-end
-Depth:changed() 
-
 Attack = Knob("Attack", 0, 0, 1000) -- 0 msec
-Attack.changed = function (self)
-    self.displayText = string.format("%4.0f msec", self.value)
-    lfo.attack = self.value
-end
-Attack:changed()
+
+local lfo = LFO.new()
+bindKnobsToLfo{lfo=lfo, delay=Delay, freq=Freq, depth=Depth, attack=Attack}
 
 function onNote(e)
     local id = postEvent(e) -- duration is omitted
